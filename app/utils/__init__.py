@@ -9,13 +9,11 @@ logger = logging.getLogger(__name__)
 class ModelStorage:
     @staticmethod
     def save_model_to_db(model, scaler):
-        """Save model to database"""
         try:
-            # Serialize model to binary
             bio = io.BytesIO()
             joblib.dump({'model': model, 'scaler': scaler}, bio)
             binary_model = bio.getvalue()
-
+            
             # Store in database
             db.session.execute("""
                 INSERT INTO model_storage (model_binary) 
@@ -31,7 +29,6 @@ class ModelStorage:
 
     @staticmethod
     def load_model_from_db():
-        """Load model from database"""
         try:
             result = db.session.execute("""
                 SELECT model_binary FROM model_storage LIMIT 1;
@@ -42,9 +39,7 @@ class ModelStorage:
                 artifacts = joblib.load(bio)
                 logger.info("Model loaded from database")
                 return artifacts['model'], artifacts['scaler']
-            else:
-                logger.warning("No model found in database")
-                return None, None
+            return None, None
         except Exception as e:
             logger.error(f"Error loading model from database: {e}")
-            raise
+            return None, None
