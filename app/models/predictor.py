@@ -12,25 +12,20 @@ logger = logging.getLogger(__name__)
 
 class CardiovascularPredictor:
     def __init__(self):
-        self.model = LogisticRegression(
-            C=1.0,
-            max_iter=1000,
-            random_state=42,
-            n_jobs=-1
-        )
-        self.scaler = StandardScaler()
+        self.model = None
+        self.scaler = None
         self.feature_columns = [
             'age', 'gender', 'height', 'weight', 
             'ap_hi', 'ap_lo', 'cholesterol', 'gluc',
             'smoke', 'alco', 'active'
         ]
-        # Try to load saved model on initialization
+        # Try to load model from database
         try:
-            self.load('models/cardio_model.joblib')
-            logger.info("Loaded pre-trained model successfully")
+            self.model, self.scaler = ModelStorage.load_model_from_db()
+            if self.model:
+                logger.info("Model loaded from database")
         except Exception as e:
-            logger.warning(f"Could not load pre-trained model: {e}")
-
+            logger.warning(f"Could not load model: {e}")
     
     def train(self, df):
         """Train the model using the provided dataframe"""
@@ -92,13 +87,9 @@ class CardiovascularPredictor:
             logger.error(f"Prediction error: {str(e)}")
             raise
     
-    def save(self, filepath='models/cardio_model.joblib'):
-        """Save model and scaler"""
-        joblib.dump({
-            'model': self.model,
-            'scaler': self.scaler
-        }, filepath)
-        logger.info(f"Model saved to {filepath}")
+    def save(self):
+        """Save model to database"""
+        ModelStorage.save_model_to_db(self.model, self.scaler)
     
     def load(self, filepath='models/cardio_model.joblib'):
         """Load model and scaler"""

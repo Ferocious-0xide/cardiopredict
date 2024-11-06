@@ -32,3 +32,18 @@ def train_initial_model():
 
 if __name__ == "__main__":
     train_initial_model()
+
+
+from app.utils.model_storage import ModelStorage
+
+def train_initial_model():
+    print("Loading data...")
+    df = pd.read_csv(data_path, sep=';')
+    
+    print("Training model...")
+    app = create_app()
+    with app.app_context():
+        predictor = CardiovascularPredictor()
+        predictor.train(df)
+        predictor.save()  # This will now save to database
+        print("Model trained and saved to database!")    
