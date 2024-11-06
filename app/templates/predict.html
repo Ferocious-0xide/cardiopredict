@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+
+{% block title %}Make Prediction - CardioPredict{% endblock %}
+
+{% block content %}
+<div class="bg-white shadow sm:rounded-lg">
+    <div class="px-4 py-5 sm:p-6">
+        <h2 class="text-lg font-medium leading-6 text-gray-900">Cardiovascular Disease Prediction</h2>
+        <div class="mt-5">
+            <form method="POST" action="{{ url_for('main.predict') }}" class="space-y-6">
+                <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+                    <!-- Age -->
+                    <div class="relative">
+                        <label class="block text-sm font-medium text-gray-700">
+                            Age (years)
+                            <span class="ml-1 text-gray-400 hover:text-gray-500 cursor-help" title="{{ tooltips.age }}">(?)</span>
+                        </label>
+                        <input type="number" name="age" required step="0.1" min="0" max="100"
+                               class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+
+                    <!-- Gender -->
+                    <div class="relative">
+                        <label class="block text-sm font-medium text-gray-700">
+                            Gender
+                            <span class="ml-1 text-gray-400 hover:text-gray-500 cursor-help" title="{{ tooltips.gender }}">(?)</span>
+                        </label>
+                        <select name="gender" required
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="1">Female</option>
+                            <option value="2">Male</option>
+                        </select>
+                    </div>
+
+                    <!-- Height -->
+                    <div class="relative">
+                        <label class="block text-sm font-medium text-gray-700">
+                            Height (cm)
+                            <span class="ml-1 text-gray-400 hover:text-gray-500 cursor-help" title="{{ tooltips.height }}">(?)</span>
+                        </label>
+                        <input type="number" name="height" required min="120" max="220"
+                               class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+
+                    <!-- Weight -->
+                    <div class="relative">
+                        <label class="block text-sm font-medium text-gray-700">
+                            Weight (kg)
+                            <span class="ml-1 text-gray-400 hover:text-gray-500 cursor-help" title="{{ tooltips.weight }}">(?)</span>
+                        </label>
+                        <input type="number" name="weight" required step="0.1" min="30" max="200"
+                               class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+
+                    <!-- Blood Pressure -->
+                    <div class="relative">
+                        <label class="block text-sm font-medium text-gray-700">
+                            Systolic Blood Pressure
+                            <span class="ml-1 text-gray-400 hover:text-gray-500 cursor-help" title="{{ tooltips.ap_hi }}">(?)</span>
+                        </label>
+                        <input type="number" name="ap_hi" required min="80" max="220"
+                               class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+
+                    <div class="relative">
+                        <label class="block text-sm font-medium text-gray-700">
+                            Diastolic Blood Pressure
+                            <span class="ml-1 text-gray-400 hover:text-gray-500 cursor-help" title="{{ tooltips.ap_lo }}">(?)</span>
+                        </label>
+                        <input type="number" name="ap_lo" required min="40" max="120"
+                               class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+
+                    <!-- Cholesterol -->
+                    <div class="relative">
+                        <label class="block text-sm font-medium text-gray-700">
+                            Cholesterol Level
+                            <span class="ml-1 text-gray-400 hover:text-gray-500 cursor-help" title="{{ tooltips.cholesterol }}">(?)</span>
+                        </label>
+                        <select name="cholesterol" required
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="1">Normal</option>
+                            <option value="2">Above Normal</option>
+                            <option value="3">Well Above Normal</option>
+                        </select>
+                    </div>
+
+                    <!-- Glucose -->
+                    <div class="relative">
+                        <label class="block text-sm font-medium text-gray-700">
+                            Glucose Level
+                            <span class="ml-1 text-gray-400 hover:text-gray-500 cursor-help" title="{{ tooltips.gluc }}">(?)</span>
+                        </label>
+                        <select name="gluc" required
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="1">Normal</option>
+                            <option value="2">Above Normal</option>
+                            <option value="3">Well Above Normal</option>
+                        </select>
+                    </div>
+
+                    <!-- Lifestyle Factors -->
+                    <div class="relative">
+                        <label class="block text-sm font-medium text-gray-700">
+                            Smoking
+                            <span class="ml-1 text-gray-400 hover:text-gray-500 cursor-help" title="{{ tooltips.smoke }}">(?)</span>
+                        </label>
+                        <select name="smoke" required
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                    </div>
+
+                    <div class="relative">
+                        <label class="block text-sm font-medium text-gray-700">
+                            Alcohol Intake
+                            <span class="ml-1 text-gray-400 hover:text-gray-500 cursor-help" title="{{ tooltips.alco }}">(?)</span>
+                        </label>
+                        <select name="alco" required
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                    </div>
+
+                    <div class="relative">
+                        <label class="block text-sm font-medium text-gray-700">
+                            Physical Activity
+                            <span class="ml-1 text-gray-400 hover:text-gray-500 cursor-help" title="{{ tooltips.active }}">(?)</span>
+                        </label>
+                        <select name="active" required
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex justify-end space-x-4">
+                    <button type="reset"
+                            class="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Reset Form
+                    </button>
+                    <button type="submit"
+                            class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Get Prediction
+                    </button>
+                </div>
+            </form>
+
+            {% if prediction %}
+            <div class="mt-8 p-4 border rounded-md {% if prediction.result == 'Positive' %}bg-red-50{% else %}bg-green-50{% endif %}">
+                <h3 class="text-lg font-medium">Prediction Results</h3>
+                <div class="mt-4 space-y-2">
+                    <p>
+                        <span class="font-medium">Result:</span>
+                        <span class="{% if prediction.result == 'Positive' %}text-red-600{% else %}text-green-600{% endif %} font-semibold">
+                            {{ prediction.result }}
+                        </span>
+                    </p>
+                    <p>
+                        <span class="font-medium">Confidence:</span>
+                        <span class="font-semibold">{{ prediction.confidence }}%</span>
+                    </p>
+                    <p>
+                        <span class="font-medium">Risk Level:</span>
+                        <span class="font-semibold 
+                            {% if prediction.risk_level == 'High' %}text-red-600
+                            {% elif prediction.risk_level == 'Medium' %}text-yellow-600
+                            {% else %}text-green-600{% endif %}">
+                            {{ prediction.risk_level }}
+                        </span>
+                    </p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
